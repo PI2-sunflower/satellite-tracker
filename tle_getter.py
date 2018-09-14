@@ -20,11 +20,12 @@ def get_tle(id):
     ENDPOINT = 'https://www.n2yo.com/rest/v1/satellite/tle/{}&apiKey={}'
 
     url = ENDPOINT.format(id, API_KEYS[API_NAME])
-    print('url = {}'.format(url))
 
     response = requests.get(url).json()
+
     tle = response['tle']
-    return tle
+    line1, line2 = tle.split('\r\n')
+    return line1, line2
 
 if __name__ == '__main__':
     print('API_KEYS = {}'.format(API_KEYS))
