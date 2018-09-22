@@ -5,3 +5,5 @@ pandas
 requests
 pytest
 sgp4
+pyorbital
+pymap3d
