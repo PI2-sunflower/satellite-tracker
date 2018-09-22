@@ -50,9 +50,9 @@ def get_az_el(lat, lng, alt, norad_id=None, name=None, seconds=1):
 
     url = ENDPOINT.format(norad_id, lat, lng, alt, seconds, API_KEYS[API_NAME])
     response = requests.get(url).json()
-    print('response = {}'.format(response))
     positions = response['positions']
-    return positions[0]['azimuth'], positions[0]['elevation']
+    timestamp = positions[0]['timestamp']
+    return positions[0]['azimuth'], positions[0]['elevation'], timestamp
 
 
 if __name__ == '__main__':
