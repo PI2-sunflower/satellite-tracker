@@ -60,8 +60,7 @@ def annotate_satellite(ax, az, el, dates):
                       columns=['Azimuth', 'Elevation', 'Time'])
     return df
 
-
-def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, annotate=True):
+def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, annotate=True, title=''):
     positions_at = satellite.propagate_positions(start, end, count=count)
     azimuth = []
     elevation = []
@@ -78,6 +77,9 @@ def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, 
     plot_az_el(azimuth, elevation)
     dates = [x[1] for x in positions_at]
     ax = plt.gca()
+
+    plt.suptitle(title, size=20)
+
     if annotate:
         df = annotate_satellite(ax, azimuth, elevation, dates)
         return df

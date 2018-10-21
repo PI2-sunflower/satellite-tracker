@@ -99,7 +99,7 @@ class Satellite:
         if date is None:
             date = datetime.now(timezone.utc)
 
-        eci_position = self.propagate(date)
+        eci_position = self.propagate(date)[0]
         aer_position = pm.eci2aer(eci_position, observer_latitude,
                                   observer_longitude, observer_altitude, date)
 

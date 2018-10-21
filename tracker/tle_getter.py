@@ -28,7 +28,6 @@ def get_tle(norad_id=None, name=None):
     ENDPOINT = 'https://www.n2yo.com/rest/v1/satellite/tle/{}&apiKey={}'
 
     url = ENDPOINT.format(norad_id, API_KEYS[API_NAME])
-
     response = requests.get(url).json()
 
     tle = response['tle']
