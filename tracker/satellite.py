@@ -40,7 +40,8 @@ class Satellite:
                   date.second + (date.microsecond / 1000000.0)
 
         r, v = self.satellite.propagate(*date_at)
-        assert self.satellite.error == 0
+        if self.satellite.error > 0:
+            raise ValueError('SGP4 error: {}\n'.format(self.satellite.error_message))
 
         to_meters = lambda x: tuple(km_to_meters(y) for y in x)
         vectors = tuple(to_meters(vector) for vector in (r, v))
