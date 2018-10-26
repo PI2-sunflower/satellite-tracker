@@ -21,7 +21,7 @@ def elevation_to_radius(el):
        output: angle in radians (radians)'''
 
     if abs(el) > 90.0:
-        raise ValueError('Elevation must be in [-90.0, +90.0]')
+        raise ValueError('Elevation {} is not in [-90.0, +90.0]'.format(el))
 
     radius = 90.0 - el
     return radius

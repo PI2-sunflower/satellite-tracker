@@ -1,15 +1,18 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.patches import Circle, PathPatch
 import pymap3d as pm
 
 from tracker import conversions
 
 
 def plot_az_el(az, el):
+    assert(len(az) > 1)
+
     plt.figure(num=1, figsize=(10, 10))
 
-    visible, invisible = split_visible_points(az, el)
+    visible, invisible = split_visible_points(az[1:-1], el[1:-1])
     points_color = {
         'b': az_el_to_theta_radius(visible),
         'r': az_el_to_theta_radius(invisible),
@@ -23,13 +26,18 @@ def plot_az_el(az, el):
 
         x, y = list(zip(*points))
         ax.plot(x, y, marker='o', linestyle='', ms=5, color=color, alpha=0.75)
+    first_last = az_el_to_theta_radius([(az[i], el[i]) for i in [0, -1]])
+#    for point in first_last:
+#        ax.plot([point[0]], [point[1]], marker='o', linestyle='', ms=6, color='black', alpha=0.9)
+    x = [point[0] for point in first_last]
+    y = [point[1] for point in first_last]
+    ax.plot(x, y, marker='o', linestyle='', ms=5, color='black', alpha=0.75)
 
-    ax.set_rticks([30.0, 60.0, 90.0])
+    ax.set_rticks([])
     ax.set_xticklabels(['East', '', 'North', '', 'West', '', 'South', ''])
     ax.set_xlabel('x = azimuth [0, 360]', fontsize=15)
     ax.set_ylabel('y = elevation [-90, +90]', fontsize=15, labelpad=20)
 
-    from matplotlib.patches import Circle, PathPatch
 
     circle = Circle((0, 0), 180, transform=ax.transData._b, color='grey',
                     alpha=0.5)
@@ -44,6 +52,18 @@ def plot_az_el(az, el):
     invisible_area = mpatches.Patch(color='grey', label='Invisible area')
 
     plt.legend(handles=[visible_patch, invisible_patch, invisible_area])
+
+    for i in [0, 30, 60, 90, -30]:
+        x = conversions.azimuth_to_theta(45)
+        y = conversions.elevation_to_radius(i)
+        print('xy = {}'.format((x, y)))
+        ax.annotate(str(i), xy=(x, y))
+
+
+
+    ax.annotate('   Start', first_last[0])
+    ax.annotate('   End', first_last[1])
+
 
 
 def annotate_satellite(ax, az, el, dates):
