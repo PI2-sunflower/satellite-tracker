@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timezone
 
 import requests
 
@@ -12,6 +13,7 @@ SATELLITES_IDS = {
     'BRISAT': 41591,
     'AQUARIUS': 37673,
     'ARIANE': 25990,
+    'TELSTAR4': 23670,
 }
 
 
@@ -52,8 +54,20 @@ def get_az_el(lat, lng, alt, norad_id=None, name=None, seconds=1):
     url = ENDPOINT.format(norad_id, lat, lng, alt, seconds, API_KEYS[API_NAME])
     response = requests.get(url).json()
     positions = response['positions']
-    timestamp = positions[0]['timestamp']
-    return positions[0]['azimuth'], positions[0]['elevation'], timestamp
+
+    az = []
+    el = []
+    dates = []
+
+    for i in range(len(positions)):
+        az.append(positions[i]['azimuth'])
+        el.append(positions[i]['elevation'])
+
+        timestamp = positions[i]['timestamp']
+        date = datetime.utcfromtimestamp(timestamp).replace(tzinfo=timezone.utc)
+        dates.append(date)
+
+    return az, el, dates
 
 
 if __name__ == '__main__':
