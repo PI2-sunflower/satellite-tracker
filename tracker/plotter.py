@@ -110,9 +110,10 @@ def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, 
 
     plt.suptitle(title, size=20)
 
-    if annotate:
-        df = annotate_satellite(ax, azimuth, elevation, dates)
-        return df
+    df = pd.DataFrame({'Azimuth': azimuth,
+                       'Elevation': elevation,
+                       'Date': dates})
+    return df
 
 
 def split_visible_points(x, y):
