@@ -10,7 +10,8 @@ API_KEYS = {
 SATELLITES_IDS = {
     'ISS': 25544,
     'BRISAT': 41591,
-    'AQUARIUS': 37673, 
+    'AQUARIUS': 37673,
+    'ARIANE': 25990,
 }
 
 

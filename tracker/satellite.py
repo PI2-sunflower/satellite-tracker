@@ -5,7 +5,7 @@ from sgp4.io import twoline2rv
 from sgp4.model import Satellite
 import pymap3d as pm
 from tracker.conversions import km_to_meters
-from math import ceil
+from math import floor
 import numpy as np
 
 METERS_IN_A_KILOMETER = 1000.0
@@ -74,11 +74,13 @@ class Satellite:
 
         if not isinstance(count, int):
             raise ValueError('count must be int')
-        if count < 1:
-            raise ValueError('count must be >= 1')
+        if count <= 1:
+            raise ValueError('count must be > 1')
 
-        step = ceil((end - start).seconds / count)
-        print('STEP = {}'.format(step))
+        time_delta = (end - start).total_seconds()
+        step = max(floor(time_delta / (count - 1)), 1)
+        print('Step = {}'.format(step))
+        assert(step > 0)
 
         position_time = lambda x, y: (x.propagate(y)[0], y)
 

@@ -33,7 +33,12 @@ def plot_az_el(az, el):
     y = [point[1] for point in first_last]
     ax.plot(x, y, marker='o', linestyle='', ms=5, color='black', alpha=0.75)
 
-    ax.set_rticks([])
+    ax.set_rticks([30, 60, 90])
+
+    labels = [item.get_text() for item in ax.get_yticklabels()]
+    empty_string_labels = [''] * len(labels)
+    ax.set_yticklabels(empty_string_labels)
+
     ax.set_xticklabels(['East', '', 'North', '', 'West', '', 'South', ''])
     ax.set_xlabel('x = azimuth [0, 360]', fontsize=15)
     ax.set_ylabel('y = elevation [-90, +90]', fontsize=15, labelpad=20)
@@ -82,8 +87,10 @@ def annotate_satellite(ax, az, el, dates):
 
 def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, annotate=True, title=''):
     positions_at = satellite.propagate_positions(start, end, count=count)
+
     azimuth = []
     elevation = []
+    dates = []
 
     for position_at in positions_at:
         eci, date = position_at
@@ -93,6 +100,9 @@ def see_satellite(satellite, obs_lat, obs_lon, obs_alt, start, end, count=None, 
 
         azimuth.append(az)
         elevation.append(el)
+        dates.append(date)
+
+    print('plotted points between [{}] and [{}].'.format(dates[0], dates[-1]))
 
     plot_az_el(azimuth, elevation)
     dates = [x[1] for x in positions_at]
