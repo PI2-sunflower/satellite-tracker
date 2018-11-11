@@ -110,4 +110,15 @@ class Satellite:
         el = aer_position[1][0]
         return az, el
 
+    def propagate_az_el_step(self, observer_lat, observer_lon,
+                             observer_alt,
+                             start=datetime.now(tz=timezone.utc), count=50,
+                             step=1):
+        '''Propagates satellite's for count points, where each point is
+        propagated step seconds apart, starting at time date'''
+        dates = [start + timedelta(seconds=step * i) for i in range(count)]
+        az_el = [self.get_observer_azimuth_elevation(observer_lat,
+                 observer_lon, observer_alt, date=date) for date in dates]
+        return az_el, dates
+
 

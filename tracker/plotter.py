@@ -61,7 +61,6 @@ def plot_az_el(az, el):
     for i in [0, 30, 60, 90, -30]:
         x = conversions.azimuth_to_theta(45)
         y = conversions.elevation_to_radius(i)
-        print('xy = {}'.format((x, y)))
         ax.annotate(str(i), xy=(x, y))
 
 
